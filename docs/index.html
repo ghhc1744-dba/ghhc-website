@@ -15,6 +15,12 @@
       height: calc(100dvh - max(7rem, env(safe-area-inset-top))) !important;
     }
   }
+  @media (max-width: 767px) {
+    .site-header-inner { padding: 1rem; }
+    .site-brand { font-size: 1.25rem; line-height: 1.2; }
+    .mobile-menu-toggle { flex-shrink: 0; }
+    #mobile-navigation[hidden] { display: none; }
+  }
 </style>
 
 <script>window.commonConfig =
@@ -45,11 +51,11 @@
       <astro-island uid="2l5Y9i" component-url="/_astro/Router.D-6Y-OQ9.js" component-export="default" renderer-url="/_astro/client.BBNn9gTp.js" props="{}" client="only" before-hydration-url="/_astro/astro_scripts/before-hydration.js.DWHK0bmq.js" opts="{&quot;name&quot;:&quot;AppRouter&quot;,&quot;value&quot;:&quot;react&quot;}">
          <div class="min-h-screen bg-[#F9F9F7] overflow-clip selection:bg-primary/20 selection:text-foreground" data-dynamic="ref">
             <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
-               <div class="max-w-[100rem] mx-auto px-8 py-6">
+               <div class="site-header-inner max-w-[100rem] mx-auto px-8 py-6">
                   <div class="flex items-center justify-between">
-                     <a href="#" class="font-heading text-2xl md:text-3xl text-foreground hover:text-primary transition-colors">Golden Heart Home Care</a>
+                     <a href="#" class="site-brand font-heading text-2xl md:text-3xl text-foreground hover:text-primary transition-colors">Golden Heart Home Care</a>
                      <nav class="hidden md:flex items-center gap-8"><a href="#about" class="font-paragraph text-base text-foreground/80 hover:text-primary transition-colors" data-dynamic="href text">Who We Are</a><a href="#services" class="font-paragraph text-base text-foreground/80 hover:text-primary transition-colors" data-dynamic="href text">Services</a><a href="#mission" class="font-paragraph text-base text-foreground/80 hover:text-primary transition-colors" data-dynamic="href text">Mission</a><a href="#why-choose-us" class="font-paragraph text-base text-foreground/80 hover:text-primary transition-colors" data-dynamic="href text">Why Choose Us</a><a href="#gallery" id="gallery-link" class="font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Gallery</a><a href="#contact" class="font-paragraph text-base text-foreground/80 hover:text-primary transition-colors" data-dynamic="href text">Contact</a></nav>
-                     <button class="md:hidden p-2 text-foreground hover:text-primary transition-colors" aria-label="Toggle menu">
+                     <button id="mobile-menu-toggle" class="mobile-menu-toggle md:hidden p-2 text-foreground hover:text-primary transition-colors" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
                            <line x1="4" x2="20" y1="12" y2="12"></line>
                            <line x1="4" x2="20" y1="6" y2="6"></line>
@@ -57,6 +63,14 @@
                         </svg>
                      </button>
                   </div>
+                  <nav id="mobile-navigation" hidden class="md:hidden mt-4 border-t border-primary/15 pt-4" aria-label="Mobile navigation">
+                     <a href="#about" class="block py-3 font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Who We Are</a>
+                     <a href="#services" class="block py-3 font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Services</a>
+                     <a href="#mission" class="block py-3 font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Mission</a>
+                     <a href="#why-choose-us" class="block py-3 font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Why Choose Us</a>
+                     <a href="#gallery" data-gallery-link class="block py-3 font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Gallery</a>
+                     <a href="#contact" class="block py-3 font-paragraph text-base text-foreground/80 hover:text-primary transition-colors">Contact</a>
+                  </nav>
                </div>
             </header>
             <section class="relative w-full h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
@@ -468,6 +482,8 @@
          const modal = document.getElementById('gallery-modal');
          const links = document.querySelectorAll('#gallery-link, [data-gallery-link]');
          const closeButton = modal.querySelector('button[data-gallery-close]');
+         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+         const mobileNavigation = document.getElementById('mobile-navigation');
          let previousFocus;
 
          const closeGallery = () => {
@@ -478,10 +494,22 @@
 
          links.forEach((link) => link.addEventListener('click', (event) => {
             event.preventDefault();
+            if (mobileNavigation) mobileNavigation.hidden = true;
+            if (mobileMenuToggle) mobileMenuToggle.setAttribute('aria-expanded', 'false');
             previousFocus = document.activeElement;
             modal.hidden = false;
             document.body.classList.add('gallery-open');
             closeButton.focus();
+         }));
+
+         mobileMenuToggle?.addEventListener('click', () => {
+            const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+            mobileMenuToggle.setAttribute('aria-expanded', String(!isOpen));
+            mobileNavigation.hidden = isOpen;
+         });
+         mobileNavigation?.querySelectorAll('a:not([data-gallery-link])').forEach((link) => link.addEventListener('click', () => {
+            mobileNavigation.hidden = true;
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
          }));
 
          modal.querySelectorAll('[data-gallery-close]').forEach((element) => element.addEventListener('click', closeGallery));
