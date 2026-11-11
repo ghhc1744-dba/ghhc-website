@@ -421,7 +421,7 @@
                      </div>
                      <div>
                         <h3 class="font-heading text-2xl mb-6">Quick Links</h3>
-                        <nav class="space-y-3"><a href="#about" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Who We Are</a><a href="#services" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Services</a><a href="#mission" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Mission</a><a href="#contact" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Contact</a></nav>
+                        <nav class="space-y-3"><a href="#about" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Who We Are</a><a href="#services" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Services</a><a href="#mission" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Mission</a><a href="#gallery" data-gallery-link class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Gallery</a><a href="#contact" class="block font-paragraph text-base text-white/80 hover:text-primary transition-colors">Contact</a></nav>
                      </div>
                      <div>
                         <h3 class="font-heading text-2xl mb-6">Golden Heart Home Care</h3>
@@ -457,7 +457,7 @@
    <script>
       (() => {
          const modal = document.getElementById('gallery-modal');
-         const link = document.getElementById('gallery-link');
+         const links = document.querySelectorAll('#gallery-link, [data-gallery-link]');
          const closeButton = modal.querySelector('button[data-gallery-close]');
          let previousFocus;
 
@@ -467,13 +467,13 @@
             previousFocus?.focus();
          };
 
-         link.addEventListener('click', (event) => {
+         links.forEach((link) => link.addEventListener('click', (event) => {
             event.preventDefault();
             previousFocus = document.activeElement;
             modal.hidden = false;
             document.body.classList.add('gallery-open');
             closeButton.focus();
-         });
+         }));
 
          modal.querySelectorAll('[data-gallery-close]').forEach((element) => element.addEventListener('click', closeGallery));
          document.addEventListener('keydown', (event) => {
