@@ -6,6 +6,15 @@
 <style>
   body.gallery-open { overflow: hidden; }
   #gallery-modal[hidden] { display: none; }
+  @media (max-width: 639px) {
+    #gallery-modal {
+      align-items: flex-start;
+      padding-top: max(7rem, env(safe-area-inset-top));
+    }
+    #gallery-modal > .relative {
+      height: calc(100dvh - max(7rem, env(safe-area-inset-top))) !important;
+    }
+  }
 </style>
 
 <script>window.commonConfig =
